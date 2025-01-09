@@ -69,10 +69,33 @@ def parse_recent_playback(results):
     
     return df
 
-# Retrieve the results in a dataframe
+# Store the results data in a pandas dataframe
 df = parse_recent_playback(results)
-print(df.head())
-print(df[['album_name', 'artists']].head())
-print(df.info())
-df_unique = df.groupby('album_name')['track_name'].nunique().sort_values(ascending=False)
-print(df_unique)
+
+def data_agg(df):
+    """
+    This funcion will show the aggregated data of the parsing results
+
+    Args:
+        df (pd.DataFrame): A DataFrame with columns for track details and playback time.
+
+    Returns:
+        pd.DataFrame: An aggregated table from the input, showing the number of albums and tracks from each artist.
+    """
+
+    df_agg = df.groupby('artists').agg(
+        num_album = ('album_name', 'nunique'),
+        num_track = ('track_name', 'nunique'),
+        max_played_at = ('played_at', 'max'),
+        min_played_at = ('played_at', 'min')
+    )
+    
+    df_agg = print(df_agg)
+
+    return df_agg
+
+# Retrieve the results in a dataframe
+if __name__ == '__main__':
+    data_agg(df)
+else:
+    None
