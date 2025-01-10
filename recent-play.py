@@ -94,14 +94,25 @@ def data_agg(df):
         num_track = ('track_name', 'nunique'),
         max_played_date = ('played_at_date', 'max'),
         min_played_date = ('played_at_date', 'min')
-    )
+    ).sort_values(
+        ['num_album', 'num_track'],
+        ascending=False)
     
     df_agg = print(df_agg)
 
     return df_agg
 
-# Retrieve the results in a dataframe
+# Run function `data_agg()` to retrieve the aggregated data and
+# store the raw results data in a CSV file
 if __name__ == '__main__':
+    filename = 'spotify_recent_playback.csv'
+
+    print('\n======Start aggregating data======\n')
     data_agg(df)
+    print('\n======Finish aggregating data======\n')
+    
+    print('======Start storing results into a CSV file======\n')
+    df.to_csv(filename, index=False)
+    print('======Finish creating the CSV file, named as {}======\n'.format(filename))
 else:
     None
