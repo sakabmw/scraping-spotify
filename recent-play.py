@@ -7,10 +7,12 @@ import pandas as pd
 load_dotenv()
 
 # Spotify Credentials
+# The variables will pick their respective values from .env
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-APP_REDIRECT_URI = os.getenv("APP_REDIRECT_URI")
+REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI")
 
+# Check point whether the CLIENT_ID or CLIENT_SECRET is already set or not
 if not CLIENT_ID or not CLIENT_SECRET:
     raise ValueError("Please set the SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables")
 
@@ -20,10 +22,11 @@ sp = spotipy.Spotify(
     auth_manager=SpotifyOAuth(
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
-        redirect_uri=APP_REDIRECT_URI,
+        redirect_uri=REDIRECT_URI,
         scope=scope))
 
-# Fetch recently played tracks
+# Fetch recently played tracks, allowed to only <= 50 songs
+# The results are json formatted data
 results = sp.current_user_recently_played(limit=50)
 
 def parse_recent_playback(results):
