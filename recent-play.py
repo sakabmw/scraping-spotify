@@ -67,8 +67,11 @@ def parse_recent_playback(results):
     # Convert the list of dictionaries into a pandas DataFrame
     df = pd.DataFrame(playback_data)
 
-    # Convert 'Played At' to datetime for easier manipulation
+    # Convert 'played_at' to datetime for easier manipulation
     df['played_at'] = pd.to_datetime(df['played_at'])
+
+    # Add `date part only` version of `played_at`
+    df['played_at_date'] = pd.to_datetime(df['played_at'].dt.date)
     
     return df
 
@@ -89,8 +92,8 @@ def data_agg(df):
     df_agg = df.groupby('artists').agg(
         num_album = ('album_name', 'nunique'),
         num_track = ('track_name', 'nunique'),
-        max_played_at = ('played_at', 'max'),
-        min_played_at = ('played_at', 'min')
+        max_played_date = ('played_at_date', 'max'),
+        min_played_date = ('played_at_date', 'min')
     )
     
     df_agg = print(df_agg)
