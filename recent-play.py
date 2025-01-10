@@ -53,6 +53,7 @@ def parse_recent_playback(results):
         album_art_url = track['album']['images'][0]['url'] if track['album']['images'] else None
         played_at = item['played_at']
         spotify_url = track['external_urls']['spotify']
+        duration_m = track['duration_ms']/1000/60 # convert miliseconds to minutes
         
         # Append a dictionary to the playback_data list
         playback_data.append({
@@ -61,7 +62,8 @@ def parse_recent_playback(results):
             'album_name': album_name,
             'album_art_url': album_art_url,
             'played_at': played_at,
-            'spotify_url': spotify_url
+            'spotify_url': spotify_url,
+            'duration_m': duration_m
         })
     
     # Convert the list of dictionaries into a pandas DataFrame
@@ -92,6 +94,7 @@ def data_agg(df):
     df_agg = df.groupby('artists').agg(
         num_album = ('album_name', 'nunique'),
         num_track = ('track_name', 'nunique'),
+        total_minutes = ('duration_m', 'sum'),
         max_played_date = ('played_at_date', 'max'),
         min_played_date = ('played_at_date', 'min')
     ).sort_values(
