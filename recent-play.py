@@ -92,13 +92,14 @@ def data_agg(df):
     """
 
     df_agg = df.groupby('artists').agg(
-        num_album = ('album_name', 'nunique'),
+        total_plays = ('track_name', 'count'),
         num_track = ('track_name', 'nunique'),
+        num_album = ('album_name', 'nunique'),
         total_minutes = ('duration_m', 'sum'),
         max_played_date = ('played_at_date', 'max'),
         min_played_date = ('played_at_date', 'min')
     ).sort_values(
-        ['num_album', 'num_track'],
+        ['total_plays', 'num_track','num_album'],
         ascending=False)
     
     df_agg = print(df_agg)
