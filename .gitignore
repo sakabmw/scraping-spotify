@@ -1,2 +1,3 @@
 spotify/
-script/.env
+.env
+.cache
